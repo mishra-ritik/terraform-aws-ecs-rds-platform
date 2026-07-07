@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: hotel_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: appuser
+      POSTGRES_PASSWORD: appsecret
+      POSTGRES_DB: appdb
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Files here run once, in alphabetical order, the first time the volume is
+      # empty. Mounted individually (the entrypoint does not recurse into
+      # subdirectories) so the order is: schema -> indexes -> seed.
+      - ./migrations/001_schema.sql:/docker-entrypoint-initdb.d/01_schema.sql:ro
+      - ./migrations/002_indexes.sql:/docker-entrypoint-initdb.d/02_indexes.sql:ro
+      - ./seed/seed.sql:/docker-entrypoint-initdb.d/03_seed.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U appuser -d appdb"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata:
