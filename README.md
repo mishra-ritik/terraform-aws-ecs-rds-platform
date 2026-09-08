@@ -1,11 +1,12 @@
-# DevOps Assessment — Terraform + Database Reliability
+# AWS ECS + RDS Platform on Terraform
 
-AWS infrastructure designed with Terraform (module-based, multi-environment) plus
-a locally runnable PostgreSQL setup demonstrating migrations, seeding, query
-optimization, and backup/restore.
+Module-based, multi-environment AWS infrastructure: a public ALB in front of ECS
+Fargate, with a private RDS PostgreSQL instance reachable only from the application
+security group. Paired with a locally runnable PostgreSQL setup demonstrating
+migrations, seeding, query optimization, and backup/restore.
 
-> AWS deployment is **not** required. Terraform is validated with
-> `fmt` / `init` / `validate` / `plan`. Database tasks run locally via Docker Compose.
+> Terraform is plan-validated offline (`fmt` / `init` / `validate` / `plan`) with no
+> AWS credentials required. Database tasks run locally via Docker Compose.
 
 ---
 
